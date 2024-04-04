@@ -12,7 +12,7 @@ users = [
 ]
 
 
-# Endpoint para obtener todos los usuarios (GET) con caché
+
 @app.route('/users', methods=['GET'])
 def get_users():
     cached_users = redis_client.get('users')
@@ -26,16 +26,16 @@ def get_users():
         redis_client.set('users', str(users))
         return jsonify(users)
 
-# Endpoint para agregar un nuevo usuario (POST) con invalidación de caché
+
 @app.route('/users', methods=['POST'])
 def add_user():
     new_user = request.json
     users = eval(redis_client.get('users'))
     users.append(new_user)
     redis_client.set('users', str(users))
-    return jsonify({"message": "User added successfully"})
+    return jsonify({"message": "Usuario agreagado"})
 
-# Endpoint para actualizar un usuario existente (PUT) con invalidación de caché
+
 @app.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     users = eval(redis_client.get('users'))
@@ -43,10 +43,10 @@ def update_user(user_id):
         if user['id'] == user_id:
             user.update(request.json)
             redis_client.set('users', str(users))
-            return jsonify({"message": "User updated successfully"})
+            return jsonify({"message": "Usuario Actualizado"})
     return jsonify({"message": "User not found"}), 404
 
-# Endpoint para eliminar un usuario existente (DELETE) con invalidación de caché
+
 @app.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     users = eval(redis_client.get('users'))
@@ -54,7 +54,7 @@ def delete_user(user_id):
         if user['id'] == user_id:
             users.remove(user)
             redis_client.set('users', str(users))
-            return jsonify({"message": "User deleted successfully"})
+            return jsonify({"message": "Ususario Eliminado"})
     return jsonify({"message": "User not found"}), 404
 
 if __name__ == '__main__':
